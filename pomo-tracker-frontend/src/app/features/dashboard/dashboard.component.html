@@ -1,0 +1,75 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>🍅 Pomo Tracker</h1>
+    <div class="user-info">
+      <span>Bienvenue, {{ username }}!</span>
+      <button class="btn btn-logout" (click)="logout()">Déconnexion</button>
+    </div>
+  </header>
+
+  <nav class="main-nav">
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+    <a routerLink="/pomodoro" routerLinkActive="active" class="nav-link">Pomodoro</a>
+    <a routerLink="/calendar" routerLinkActive="active" class="nav-link">Calendrier</a>
+  </nav>
+
+  <div class="stats-section">
+    <div class="stat-card">
+      <h3>Pomodoros complétés aujourd'hui</h3>
+      <p class="stat-value">{{ stats.completedCount }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Minutes de concentration</h3>
+      <p class="stat-value">{{ stats.totalMinutes }} min</p>
+    </div>
+  </div>
+
+  <div class="tasks-section">
+    <div class="tasks-header">
+      <h2>Mes Tâches</h2>
+      <hr>
+      <button class="btn btn-primary" (click)="toggleTaskForm()">
+        {{ showTaskForm ? 'Annuler' : '+ Nouvelle tâche' }}
+      </button>
+      <hr>
+    </div>
+
+    <div *ngIf="showTaskForm" class="task-form">
+      <form [formGroup]="taskForm" (ngSubmit)="createTask()">
+        <input
+          type="text"
+          formControlName="title"
+          placeholder="Titre de la tâche..."
+          class="form-control"
+          required>
+        <button type="submit" class="btn btn-primary" [disabled]="taskForm.invalid">
+          Créer
+        </button>
+      </form>
+    </div>
+
+    <div *ngIf="tasks.length === 0" class="no-tasks">
+      <p>Aucune tâche pour le moment. Créez votre première tâche !</p>
+    </div>
+    <div *ngIf="tasks.length > 0" class="tasks-list">
+      <div *ngFor="let task of tasks" class="task-item">
+        <div class="task-info">
+          <h3 [class.completed]="task.completed">{{ task.title }}</h3>
+          <p class="task-meta">
+            <span *ngIf="task.completed" class="badge badge-completed">✓ Complétée</span>
+            <span *ngIf="!task.completed" class="badge badge-pending">En cours</span>
+          </p>
+        </div>
+        <div class="task-actions">
+          <button
+            *ngIf="!task.completed"
+            class="btn btn-success"
+            (click)="markAsCompleted(task.id!)">
+            Compléter
+          </button>
+          <button class="btn btn-danger" (click)="deleteTask(task.id!)">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

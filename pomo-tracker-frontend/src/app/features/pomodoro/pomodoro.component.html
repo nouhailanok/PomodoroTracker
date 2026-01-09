@@ -1,0 +1,67 @@
+<div class="pomodoro-container">
+  <h2>🍅 Pomodoro Timer</h2>
+  
+
+  <div class="pomodoro-card">
+    <nav class="main-nav">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+      <a routerLink="/pomodoro" routerLinkActive="active" class="nav-link">Pomodoro</a>
+      <a routerLink="/calendar" routerLinkActive="active" class="nav-link">Calendrier</a>
+    </nav>
+    <div class="timer-display">
+      <div class="time">{{ displayTime }}</div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+      </div>
+    </div>
+
+    <div *ngIf="!activeSession" class="task-selection">
+      <h3>Sélectionner une tâche</h3>
+      <select [(ngModel)]="selectedTaskId" class="task-select">
+        <option [value]="null">-- Choisir une tâche --</option>
+        <option *ngFor="let task of tasks" [value]="task.id">
+          {{ task.title }}
+        </option>
+      </select>
+      <button
+        class="btn btn-start"
+        (click)="startPomodoro()"
+        [disabled]="!selectedTaskId || tasks.length === 0">
+        🚀 Démarrer un Pomodoro (25 min)
+      </button>
+    </div>
+
+    <div *ngIf="activeSession" class="active-session">
+      <div class="session-info">
+        <p><strong>Tâche :</strong> {{ activeSession.task?.title }}</p>
+        <p><strong>Statut :</strong> {{ activeSession.status }}</p>
+        <p><strong>Temps accumulé :</strong> {{ activeSession.durationInMinutes }} minutes</p>
+      </div>
+
+      <div class="session-actions">
+        <button
+          *ngIf="!isRunning"
+          class="btn btn-resume"
+          (click)="resumePomodoro()">
+          ▶️ Reprendre
+        </button>
+        <button
+          *ngIf="isRunning"
+          class="btn btn-interrupt"
+          (click)="interruptPomodoro()">
+          ⏸️ Interrompre
+        </button>
+        <button
+          class="btn btn-complete"
+          (click)="completePomodoro()"
+          [disabled]="elapsedSeconds < 25 * 60">
+          ✓ Compléter (25 min requis)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="tasks.length === 0" class="no-tasks-message">
+    <p>⚠️ Aucune tâche disponible. Créez d'abord une tâche dans le Dashboard !</p>
+  </div>
+</div>

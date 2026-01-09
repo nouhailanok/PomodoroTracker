@@ -1,0 +1,27 @@
+<div class="calendar-container">
+  <nav class="main-nav">
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+    <a routerLink="/pomodoro" routerLinkActive="active" class="nav-link">Pomodoro</a>
+    <a routerLink="/calendar" routerLinkActive="active" class="nav-link">Calendrier</a>
+  </nav>
+  <h2>📅 Calendrier</h2>
+  
+  <div class="calendar-wrapper">
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+
+  <div class="legend">
+    <!-- <div class="legend-item">
+      <span class="legend-color" style="background-color: blue;"></span>
+      <span>Tâches planifiées</span>
+    </div> -->
+    <div class="legend-item">
+      <span class="legend-color" style="background-color: green;"></span>
+      <span>Pomodoros complétés</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-color" style="background-color: orange;"></span>
+      <span>Pomodoros interrompus</span>
+    </div>
+  </div>
+</div>
